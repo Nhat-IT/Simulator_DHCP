@@ -28,6 +28,7 @@ import javax.swing.border.EmptyBorder;
 
 public class GUI_Khach2 extends JFrame implements Runnable {
 	private InetAddress host;
+	private String IP;
 	private int port;
 	private int index;
 	private String name;
@@ -40,15 +41,16 @@ public class GUI_Khach2 extends JFrame implements Runnable {
 
 	public static void main(String[] args) throws Exception {
 		
-		new Thread(new GUI_Khach2(Integer.parseInt(args[0]),args[1])).start();
+		new Thread(new GUI_Khach2(Integer.parseInt(args[0]), args[1], args[2])).start();
 	}
 
-	public GUI_Khach2(int index, String mac) throws Exception {
+	public GUI_Khach2(int index, String mac, String ip) throws Exception {
 		this.host = InetAddress.getByName("10.0.0.205");
 		this.port = 5000;
 		this.index = index;
 		this.name = new RandomStringExmple().randomAlphaNumeric(5);
 		this.macAddress = mac;
+		this.IP = ip;
 		ds = new DatagramSocket();
 		ds.send(wk.createPacket("Request*"+name + "#" + macAddress, index, this.host, this.port));
 		XuLyKhach xuly = new XuLyKhach(ds, this.host, this.port);
@@ -60,9 +62,11 @@ public class GUI_Khach2 extends JFrame implements Runnable {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 600);
+		setTitle("Khách");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		setLocationRelativeTo(null);
 		contentPane.setLayout(null);
 		
 		panel = new JPanel();
@@ -70,17 +74,28 @@ public class GUI_Khach2 extends JFrame implements Runnable {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("TEN:");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+		JLabel lblNewLabel = new JLabel("Tên:");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblNewLabel.setBounds(10, 0, 58, 54);
 		panel.add(lblNewLabel);
+		
+		JLabel lbIP = new JLabel("IP:");
+		lbIP.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lbIP.setBounds(275, 0, 30, 54);
+		panel.add(lbIP);
+		
+		JTextField txtIP = new JTextField(IP);
+		txtIP.setBounds(310, 0, 140, 54);
+		txtIP.setEditable(false);
+		txtIP.setFont(new Font("Tahoma", Font.BOLD, 15));
+		panel.add(txtIP);
 		
 		textField = new JTextField();
 		textField.setText(name);
 		textField.setEditable(false);
 		textField.setBackground(SystemColor.control);
-		textField.setFont(new Font("Tahoma", Font.BOLD, 18));
-		textField.setBounds(69, 5, 177, 43);
+		textField.setFont(new Font("Tahoma", Font.BOLD, 15));
+		textField.setBounds(45, 5, 177, 43);
 		panel.add(textField);
 		textField.setColumns(10);
 		
@@ -110,7 +125,7 @@ public class GUI_Khach2 extends JFrame implements Runnable {
 		panel_2.add(textField_1);
 		textField_1.setColumns(10);
 		
-		JButton btnNewButton = new JButton("SEND");
+		JButton btnNewButton = new JButton("Gửi");
 		btnNewButton.setBounds(346, 10, 110, 39);
 		panel_2.add(btnNewButton);
 		btnNewButton.addActionListener(new ActionListener() {
@@ -143,12 +158,10 @@ public class GUI_Khach2 extends JFrame implements Runnable {
 				System.out.println(data.contains("qwerasadf"));
 				if(data.contains("qwerasadf")) {	
 					data = data.replace("_qwerasadf", "").replace("_hkdsfghjlksg", "");
-					System.out.println("Noi dung:" + data);
 					textArea.append(data);
 				}
 				else {
 					data = data.replace("_&faflqrwpafaf&", "");
-					System.out.println("hello");
 					data = data.substring(10);
 					textArea.append(data);
 				}

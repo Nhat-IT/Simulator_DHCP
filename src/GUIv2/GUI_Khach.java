@@ -1,5 +1,6 @@
 package GUIv2;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.DatagramPacket;
@@ -37,11 +38,13 @@ public class GUI_Khach {
 		
 		panel.setLayout(null);
 		
-		lblTitleKhach = new JLabel("HAY CHON CHUC NANG");
-		lblTitleKhach.setBounds(270, 50, 200, 25);
+		lblTitleKhach = new JLabel("HÃY CHỌN CHỨC NĂNG");
+		lblTitleKhach.setFont(new Font("Monospaced", Font.BOLD, 25));
+		lblTitleKhach.setBounds(210, 50, 300, 25);
 		panel.add(lblTitleKhach);
 		
-		btn1 = new JButton("1. Cap Tu Dong");
+		btn1 = new JButton("Cấp Tự Động");
+		btn1.setFont(new Font("Monospaced", Font.BOLD, 12));
 		btn1.setBounds(50, 120, 150, 50);
 		btn1.addActionListener(new ActionListener() {
 			
@@ -58,7 +61,8 @@ public class GUI_Khach {
 		});
 		panel.add(btn1);
 		
-		btn2 = new JButton("2. Cap Bang Tay");
+		btn2 = new JButton("Cấp Bằng Tay");
+		btn2.setFont(new Font("Monospaced", Font.BOLD, 12));
 		btn2.setBounds(250, 120, 150, 50);
 		btn2.addActionListener(new ActionListener() {
 			
@@ -75,7 +79,8 @@ public class GUI_Khach {
 		});
 		panel.add(btn2);
 		
-		btn3 = new JButton("3. Tro Lai");
+		btn3 = new JButton("Trở Lại");
+		btn3.setFont(new Font("Monospaced", Font.BOLD, 12));
 		btn3.setBounds(450, 120, 150, 50);
 		panel.add(btn3);
 		btn3.addActionListener(new ActionListener() {

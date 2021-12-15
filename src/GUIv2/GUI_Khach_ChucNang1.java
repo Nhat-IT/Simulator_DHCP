@@ -1,5 +1,6 @@
 package GUIv2;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -20,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +34,7 @@ public class GUI_Khach_ChucNang1 implements Runnable {
 	Process p;
 	workWithData wk = new workWithData();
 	DatagramSocket client;
+	Boolean ktraVaoMangClient1 = false;
 	
 
 	public static void main(String[] args) throws Exception {
@@ -66,9 +69,9 @@ public class GUI_Khach_ChucNang1 implements Runnable {
 		JButton btnReset, btnQuayLai, btnJoin, btnRefresh;
 		final JComboBox<String> cbClass;
 
-		JFrame frame = new JFrame("Cap Tu Dong");
+		JFrame frame = new JFrame("Cấp Tự Động");
 		JPanel panel = new JPanel();
-		frame.setSize(650, 600);
+		frame.setSize(600, 600);
 
 		frame.setLocationRelativeTo(null); // set form center loaction
 		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -76,32 +79,39 @@ public class GUI_Khach_ChucNang1 implements Runnable {
 
 		panel.setLayout(null);
 
-		lblTitle = new JLabel("Chon ID Mang Ban Muon Duoc Cap");
-		lblTitle.setBounds(220, 30, 200, 25);
+		lblTitle = new JLabel("Chọn ID Mạng Bạn Muốn Vào");
+		lblTitle.setFont(new Font("Monospaced", Font.BOLD, 25));
+		lblTitle.setBounds(100, 30, 500, 25);
 		panel.add(lblTitle);
 
-		lbClass = new JLabel("ID");
-		lbClass.setBounds(150, 100, 165, 25);
+		lbClass = new JLabel("ID Mạng");
+		lbClass.setFont(new Font("Monospaced", Font.BOLD, 13));
+		lbClass.setBounds(100, 100, 165, 25);
 		panel.add(lbClass);
 
-		lbFirstHost = new JLabel("FirstHost");
-		lbFirstHost.setBounds(150, 150, 165, 25);
+		lbFirstHost = new JLabel("Địa Chỉ Mạng Đầu");
+		lbFirstHost.setFont(new Font("Monospaced", Font.BOLD, 13));
+		lbFirstHost.setBounds(100, 150, 165, 25);
 		panel.add(lbFirstHost);
 
-		lbLastHost = new JLabel("LastHost");
-		lbLastHost.setBounds(150, 200, 165, 25);
+		lbLastHost = new JLabel("Địa Chỉ Mạng Cuối");
+		lbLastHost.setFont(new Font("Monospaced", Font.BOLD, 13));
+		lbLastHost.setBounds(100, 200, 165, 25);
 		panel.add(lbLastHost);
 
-		lblIP = new JLabel("IP:");
-		lblIP.setBounds(150, 250, 165, 25);
+		lblIP = new JLabel("Địa Chỉ IP");
+		lblIP.setFont(new Font("Monospaced", Font.BOLD, 13));
+		lblIP.setBounds(100, 250, 165, 25);
 		panel.add(lblIP);
 
 		lblSM = new JLabel("Subnet Mask:");
-		lblSM.setBounds(150, 300, 165, 25);
+		lblSM.setFont(new Font("Monospaced", Font.BOLD, 13));
+		lblSM.setBounds(100, 300, 165, 25);
 		panel.add(lblSM);
 
 		lblDG = new JLabel("Default Gateway:");
-		lblDG.setBounds(150, 350, 165, 25);
+		lblDG.setFont(new Font("Monospaced", Font.BOLD, 13));
+		lblDG.setBounds(100, 350, 165, 25);
 		panel.add(lblDG);
 
 		txtFH = new JTextField();
@@ -115,7 +125,7 @@ public class GUI_Khach_ChucNang1 implements Runnable {
 		panel.add(txtLH);
 
 		txtIP = new JTextField();
-		txtIP.setBounds(280, 250, 200, 25);
+		txtIP.setBounds(280, 250, 130, 25);
 		txtIP.setEditable(false);
 		panel.add(txtIP);
 
@@ -143,6 +153,7 @@ public class GUI_Khach_ChucNang1 implements Runnable {
 			public void actionPerformed(ActionEvent e) {
 				String valueIndex = cbClass.getSelectedItem().toString();
 				try {
+					ktraVaoMangClient1 = false;
 					ResultSet result = db.executeQuery(
 							"select firstIP, lastIP, subnetMask, defaultGateway from iptable where iD = " + valueIndex);
 					while (result.next()) {
@@ -162,8 +173,8 @@ public class GUI_Khach_ChucNang1 implements Runnable {
 			}
 		});
 
-		btnJoin = new JButton("Join!!!");
-		btnJoin.setBounds(450, 420, 150, 35);
+		btnJoin = new JButton("Vào Mạng =>");
+		btnJoin.setBounds(330, 420, 150, 35);
 		btnJoin.addActionListener(new ActionListener() {
 
 			@Override
@@ -171,33 +182,38 @@ public class GUI_Khach_ChucNang1 implements Runnable {
 //				txtIP.setText("");
 //				txtSM.setText("");
 //				txtDG.setText("");
-				int valueIndex = Integer.parseInt(cbClass.getSelectedItem().toString());
-				try {
-					p = Runtime.getRuntime().exec("cmd");
-					new Thread(new SyncPipe(p.getErrorStream(), System.err)).start();
-					new Thread(new SyncPipe(p.getInputStream(), System.out)).start();
-					PrintWriter stdin = new PrintWriter(p.getOutputStream());
-					stdin.println("netsh int ip set address " + "Ethernet" + " static " + txtIP.getText() + " "
-							+ txtSM.getText() + " " + txtDG.getText());
-					stdin.close();
-					p.waitFor();
-					p.destroyForcibly();
-					
+				if(ktraVaoMangClient1 == true) {
+					int valueIndex = Integer.parseInt(cbClass.getSelectedItem().toString());
+					try {
+						p = Runtime.getRuntime().exec("cmd");
+						new Thread(new SyncPipe(p.getErrorStream(), System.err)).start();
+						new Thread(new SyncPipe(p.getInputStream(), System.out)).start();
+						PrintWriter stdin = new PrintWriter(p.getOutputStream());
+						stdin.println("netsh int ip set address " + "Ethernet" + " static " + txtIP.getText() + " "
+								+ txtSM.getText() + " " + txtDG.getText());
+						stdin.close();
+						p.waitFor();
+						p.destroyForcibly();
+						
 
-					TimeUnit.SECONDS.sleep(4);
-					String index = String.valueOf(valueIndex);
-					String[] args = {index, wk.getMacDevice(txtIP.getText())};
-					GUI_Khach2.main(args);
-					frame.setVisible(false);
-				} catch (Exception ee) {
-					ee.printStackTrace();
+						TimeUnit.SECONDS.sleep(4);
+						String index = String.valueOf(valueIndex);
+						String[] args = {index, wk.getMacDevice(txtIP.getText()), txtIP.getText()};
+						GUI_Khach2.main(args);
+						frame.setVisible(false);
+					} catch (Exception ee) {
+						ee.printStackTrace();
+					}
+				}
+				else {
+					JOptionPane.showMessageDialog(panel, "Chọn \"Lấy IP\" trước khi vào mạng", "Cảnh Báo", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
 		panel.add(btnJoin);
 
-		btnQuayLai = new JButton("Quay Lai");
-		btnQuayLai.setBounds(50, 420, 150, 35);
+		btnQuayLai = new JButton("<= Quay Lại");
+		btnQuayLai.setBounds(100, 420, 150, 35);
 		btnQuayLai.addActionListener(new ActionListener() {
 
 			@SuppressWarnings("deprecation")
@@ -209,8 +225,8 @@ public class GUI_Khach_ChucNang1 implements Runnable {
 		});
 		panel.add(btnQuayLai);
 
-		btnRefresh = new JButton("Lam Moi");
-		btnRefresh.setBounds(490, 250, 100, 25);
+		btnRefresh = new JButton("Lấy IP");
+		btnRefresh.setBounds(410, 250, 70, 25);
 		btnRefresh.addActionListener(new ActionListener() {
 
 			@Override
@@ -219,7 +235,7 @@ public class GUI_Khach_ChucNang1 implements Runnable {
 				System.out.println(value + "value");
 				try {
 					client.send(wk.createPacket("DiscoveryDynamic", value, host, port));
-					System.out.println("hello");
+					ktraVaoMangClient1 = true;
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

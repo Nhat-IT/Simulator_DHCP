@@ -1,5 +1,6 @@
 package GUIv2;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,19 +21,22 @@ public class GUI_Index implements ActionListener {
 		
 		JFrame frame = new JFrame("Index");
 		JPanel panel = new JPanel();
-		frame.setSize(400, 300);		
+		frame.setSize(400, 300);	
+		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null); // set form center loaction
 		frame.add(panel);
 		
 		panel.setLayout(null);
 		
-		label = new JLabel("Ban La ???");
-		label.setBounds(170, 50, 80, 25);
+		label = new JLabel("Bạn là:");
+		label.setFont(new Font("Monospaced", Font.BOLD, 30));
+		label.setBounds(140, 50, 130, 45);
 		panel.add(label);
 		
-		btnAdmin = new JButton("Admin");
-		btnAdmin.setBounds(80, 100, 100, 30);
+		btnAdmin = new JButton("Người quản trị");
+		btnAdmin.setFont(new Font("Monospaced", Font.BOLD, 12));
+		btnAdmin.setBounds(40, 120, 150, 50);
 		btnAdmin.addActionListener(new ActionListener() {
 			
 			@Override
@@ -43,8 +47,9 @@ public class GUI_Index implements ActionListener {
 		});
 		panel.add(btnAdmin);
 		
-		btnKhach = new JButton("Khach");
-		btnKhach.setBounds(200, 100, 100, 30);
+		btnKhach = new JButton("Người sử dụng");
+		btnKhach.setFont(new Font("Monospaced", Font.BOLD, 12));
+		btnKhach.setBounds(200, 120, 150, 50);
 		btnKhach.addActionListener(new ActionListener() {
 			
 			@Override

@@ -1,5 +1,6 @@
 package GUIv2;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
@@ -25,7 +26,8 @@ public class GUI_Admin {
 		JPasswordField passwordText;
 		JButton btnLogin, btnReset, btnBack;
 		
-		JFrame frame = new JFrame("Login");
+		JFrame frame = new JFrame("Đăng Nhập Quản Trị");
+		frame.setResizable(false);
 		JPanel panel = new JPanel();
 		frame.setSize(450, 300);
 		
@@ -35,30 +37,35 @@ public class GUI_Admin {
 		
 		panel.setLayout(null);
 		
-		lblTitle = new JLabel("LOGIN");
-		lblTitle.setBounds(170, 10, 80, 25);
+		lblTitle = new JLabel("Đăng Nhập");
+		lblTitle.setFont(new Font("Monospaced", Font.BOLD, 30));
+		lblTitle.setBounds(130, 10, 200, 50);
 		panel.add(lblTitle);
 		
-		userLabel = new JLabel("Username");
-		userLabel.setBounds(50, 50, 80, 25);
+		userLabel = new JLabel("Tên Người Dùng");
+		userLabel.setFont(new Font("Monospaced", Font.BOLD, 13));
+		userLabel.setBounds(30, 70, 130, 25);
 		panel.add(userLabel);
 		
 		userText = new JTextField();
-		userText.setBounds(180, 50, 200, 25);
+		userText.setBounds(180, 70, 200, 25);
+		userText.setFont(new Font("Monospaced", Font.BOLD, 13));
 		userText.setText("admin1");
 		panel.add(userText);
 		
-		passwordLabel = new JLabel("Password");
-		passwordLabel.setBounds(50, 100, 80, 25);
+		passwordLabel = new JLabel("Mật Khẩu");
+		passwordLabel.setFont(new Font("Monospaced", Font.BOLD, 13));
+		passwordLabel.setBounds(30, 120, 80, 25);
 		panel.add(passwordLabel);
 		
 		passwordText = new JPasswordField();
-		passwordText.setBounds(180, 100, 200, 25);
+		passwordLabel.setFont(new Font("Monospaced", Font.BOLD, 13));
+		passwordText.setBounds(180, 120, 200, 25);
 		passwordText.setText("admin1");
 		panel.add(passwordText);
 		
-		btnBack = new JButton("Quay lai");
-		btnBack.setBounds(50, 170, 100, 30);
+		btnBack = new JButton("<= Quay Lại");
+		btnBack.setBounds(30, 170, 115, 50);
 		panel.add(btnBack);
 		btnBack.addActionListener(new ActionListener() {
 			
@@ -70,8 +77,8 @@ public class GUI_Admin {
 		});
 		
 		
-		btnLogin = new JButton("Login");
-		btnLogin.setBounds(170, 160, 100, 50);
+		btnLogin = new JButton("Đăng Nhập =>");
+		btnLogin.setBounds(265, 170, 115, 50);
 		panel.add(btnLogin);
 		btnLogin.addActionListener(new ActionListener() {
 			
@@ -84,8 +91,8 @@ public class GUI_Admin {
 			}
 		});
 		
-		btnReset = new JButton("Reset");
-		btnReset.setBounds(290, 170, 100, 30);
+		btnReset = new JButton("Làm Mới");
+		btnReset.setBounds(155, 170, 100, 50);
 		panel.add(btnReset);
 		btnReset.addActionListener(new ActionListener() {
 			

@@ -62,7 +62,7 @@ public class Server extends JFrame implements Runnable {
 		rs = db.executeQuery("select iD from iptable");
 		
 		chiSos = new ArrayList<String>();
-		chiSos.add("ALL");
+		chiSos.add("Tất Cả");
 		while(rs.next()) {
 			String chiSo = rs.getString(1);
 			chiSos.add(chiSo);
@@ -71,15 +71,17 @@ public class Server extends JFrame implements Runnable {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
+		setTitle("QUẢN LÍ NGƯỜI DÙNG");
 		setBounds(100, 100, 1110, 570);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		setLocationRelativeTo(null);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("QUAN LI IP");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNewLabel.setBounds(478, 10, 120, 27);
+		JLabel lblNewLabel = new JLabel("QUẢN LÍ NGƯỜI DÙNG");
+		lblNewLabel.setFont(new Font("Monospaced", Font.BOLD, 30));
+		lblNewLabel.setBounds(430, 10, 350, 50);
 		contentPane.add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
@@ -87,20 +89,20 @@ public class Server extends JFrame implements Runnable {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel_1 = new JLabel("CHON ID:");
-		lblNewLabel_1.setBounds(10, 17, 75, 19);
+		JLabel lblNewLabel_1 = new JLabel("CHỌN ID: ");
+		lblNewLabel_1.setBounds(10, 17, 85, 19);
 		panel.add(lblNewLabel_1);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_1.setFont(new Font("Monospaced", Font.BOLD, 15));
 		
 		textField = new JTextField();
-		textField.setFont(new Font("Tahoma", Font.BOLD, 15));
-		textField.setBounds(308, 14, 159, 24);
+		textField.setFont(new Font("Monospaced", Font.BOLD, 15));
+		textField.setBounds(318, 14, 159, 24);
 		panel.add(textField);
 		textField.setColumns(10);
 		
-		JButton btnNewButton = new JButton("SEARCH");
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnNewButton.setBounds(477, 14, 114, 24);
+		JButton btnNewButton = new JButton("Tìm Kiếm");
+		btnNewButton.setFont(new Font("Monospaced", Font.BOLD, 15));
+		btnNewButton.setBounds(483, 14, 114, 24);
 		panel.add(btnNewButton);
 		
 		
@@ -122,7 +124,7 @@ public class Server extends JFrame implements Runnable {
 		getContentPane().add(panel_1);
 		
 		JComboBox<String> comboBox = new JComboBox(chiSos.toArray());
-		comboBox.setFont(new Font("Tahoma", Font.BOLD, 15));
+		comboBox.setFont(new Font("Monospaced", Font.BOLD, 15));
 		comboBox.setBounds(95, 14, 135, 24);
 		comboBox.addActionListener(new ActionListener() {
 
@@ -134,7 +136,7 @@ public class Server extends JFrame implements Runnable {
 						dtm.removeRow(i);
 					}
 					clientChat cli;
-					if(valueIndex.equals("ALL")) {
+					if(valueIndex.equals("Tất Cả")) {
 						rs = db.executeQuery("select iP, port, timeRemain, macAddress from ipinfor" +" order by ipAdmin DESC");
 					}
 					else {
@@ -164,6 +166,7 @@ public class Server extends JFrame implements Runnable {
 		textArea.setBackground(SystemColor.info);
 		textArea.setColumns(41);
 		textArea.setRows(14);
+		textArea.setEditable(false);
 		panel_2.add(textArea);
 		
 		JScrollPane scText = new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -180,7 +183,7 @@ public class Server extends JFrame implements Runnable {
 		panel_3.add(textField_1);
 		textField_1.setColumns(10);
 		
-		JButton btnNewButton_1 = new JButton("SEND");
+		JButton btnNewButton_1 = new JButton("Gửi");
 		btnNewButton_1.setBounds(344, 10, 85, 40);
 		panel_3.add(btnNewButton_1);
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -301,11 +304,11 @@ public class Server extends JFrame implements Runnable {
 						client.put(cc, nameClient);
 						System.out.println("insert into ipinfor (iD,iP,port,timeRemain,ipAdmin,macAddress) values (" + id + ",\"" + clientIP.toString().substring(1) + "\"," + clientPort + "," + "2," + "0" + ",\"" + macAddress + "\"" +");");
 						db.updateQuery("insert into ipinfor (iD,iP,port,timeRemain,ipAdmin,macAddress) values (" + id + ",\"" + clientIP.toString().substring(1) + "\"," + clientPort + "," + "2," + "0" + ",\"" + macAddress + "\"" +");");
-						doanChat += nameClient + " da tham gia cuoc tro chuyen" +"\n";
-						textArea.append(nameClient + " da tham gia cuoc tro chuyen" +"\n");
+						doanChat += nameClient + " đã tham gia vào mạng" +"\n";
+						textArea.append(nameClient + " đã tham gia vào mạng" +"\n");
 						for(clientChat CC : client.keySet()) {
 							if(!(CC.getClientIP().equals(clientIP) && CC.getClientPort() == clientPort)) {
-								wk.sendData("jhiuyfjhg " + nameClient + " da tham gia cuoc tro chuyen" +"\n","&faflqrwpafaf&", server, CC.getClientIP(), CC.getClientPort());
+								wk.sendData("jhiuyfjhg " + nameClient + " đã tham gia vào mạng" +"\n","&faflqrwpafaf&", server, CC.getClientIP(), CC.getClientPort());
 							}
 							else {
 								wk.sendData("adgdsfggf " + doanChat,"&faflqrwpafaf&", server, clientIP, clientPort);
@@ -492,11 +495,11 @@ class ClientAlive extends Thread{
 				for(clientChat cc: Server.client.keySet()) {
 					if(cc.getTimeRemain() < 0) {
 						String name = Server.client.get(cc);
-						Server.textArea.append(Server.client.get(cc) + " da roi khoi" + "\n");
-						Server.doanChat += Server.client.get(cc) + " da roi khoi" + "\n";
+						Server.textArea.append(Server.client.get(cc) + " đã rời khỏi" + "\n");
+						Server.doanChat += Server.client.get(cc) + " đã rời khỏi" + "\n";
 						Server.client.remove(cc);
 						for(clientChat c: Server.client.keySet()) {
-							Server.wk.sendData("jhiuyfjhg " + name + " da tham gia cuoc tro chuyen" +"\n","&faflqrwpafaf&", ds, c.getClientIP(), c.getClientPort());
+							Server.wk.sendData("jhiuyfjhg " + name + " đã tham gia vào mạng" +"\n","&faflqrwpafaf&", ds, c.getClientIP(), c.getClientPort());
 						}
 					}
 					else {
