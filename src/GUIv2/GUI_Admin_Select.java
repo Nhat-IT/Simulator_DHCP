@@ -284,6 +284,7 @@ public class GUI_Admin_Select {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				frame.setVisible(false);
+				GUI_Index gui_index = new GUI_Index();
 			}
 		});
 		panel.add(btnQuayLai);
@@ -310,7 +311,7 @@ public class GUI_Admin_Select {
 
 						TimeUnit.SECONDS.sleep(4);
 						
-						String[] args = {valueIndex};
+						String[] args = {valueIndex, userName};
 						Server.main(args);
 						frame.setVisible(false);
 					} catch (Exception e1) {
@@ -447,8 +448,8 @@ public class GUI_Admin_Select {
 	public String getID(String FH, String LH, String IP, String DG, String SM, String name) throws	Exception {
 		String id = "";
 		rs = db.executeQuery("select * from iptable where firstIP = "+ "\"" + FH + "\"" +" and lastIP = " + "\"" + LH + "\"" + " and defaultGateway = " + "\"" + DG + "\"" + " and subnetMask = " + "\"" + SM + "\"" + " and username = " + "\"" +  name + "\"");
-		System.out.println("select * from iptable where firstIP = "+ "\"" + FH + "\"" +" and lastIP = " + "\"" + LH + "\"" + " and defaultGateway = " + "\"" + DG + "\"" + " and subnetMask = " + "\"" + SM + "\"" + " and username = " + "\"" +  name + "\"");
-		System.out.println(rs == null);
+//		System.out.println("select * from iptable where firstIP = "+ "\"" + FH + "\"" +" and lastIP = " + "\"" + LH + "\"" + " and defaultGateway = " + "\"" + DG + "\"" + " and subnetMask = " + "\"" + SM + "\"" + " and username = " + "\"" +  name + "\"");
+//		System.out.println(rs == null);
 		while(rs.next()) {
 			id = rs.getString(1);
 		}

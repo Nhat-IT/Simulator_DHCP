@@ -45,21 +45,24 @@ public class Server extends JFrame implements Runnable {
 	List<String> dataTable;
 	DefaultTableModel dtm;
 	
+	String userName;
+	
 	public static void main(String[] args) throws Exception {
 		client = new HashMap<clientChat, String>();
-		new Thread(new Server(5000,args[0])).start();
+		new Thread(new Server(5000,args[0], args[1])).start();
 		new ClientAlive(args[0],Server.server).start();	
 	}
 	
-	public Server(int port, String id) throws Exception {
+	public Server(int port, String id, String username) throws Exception {
 		this.port = port;
 		this.idServer = id;
 		this.doanChat = "";
 		this.server = new DatagramSocket(5000);
+		this.userName = username;
 		
 		System.out.println("Server is listening..."); 
 		
-		rs = db.executeQuery("select iD from iptable");
+		rs = db.executeQuery("select iD from iptable where iD IN " + getID());
 		
 		chiSos = new ArrayList<String>();
 		chiSos.add("Tất Cả");
@@ -137,7 +140,8 @@ public class Server extends JFrame implements Runnable {
 					}
 					clientChat cli;
 					if(valueIndex.equals("Tất Cả")) {
-						rs = db.executeQuery("select iP, port, timeRemain, macAddress from ipinfor" +" order by ipAdmin DESC");
+						rs = db.executeQuery("select iP, port, timeRemain, macAddress from ipinfor where iD IN " + getID() +" order by ipAdmin DESC");
+//						System.out.println("select iP, port, timeRemain, macAddress from ipinfor where iD IN " + getID() +" order by ipAdmin DESC");
 					}
 					else {
 						rs = db.executeQuery("select iP, port, timeRemain, macAddress from ipinfor where iD = " + valueIndex + " order by ipAdmin DESC");
@@ -213,7 +217,7 @@ public class Server extends JFrame implements Runnable {
 						dtm.removeRow(i);
 					}
 					clientChat cli;
-					rs = db.executeQuery("select iP, port, timeRemain, macAddress from ipinfor" +" order by ipAdmin DESC");
+					rs = db.executeQuery("select iP, port, timeRemain, macAddress from ipinfor where iD IN " + getID() +" order by ipAdmin DESC");
 					while(rs.next()) {
 						cli = new clientChat(InetAddress.getByName(rs.getString(1)), Integer.parseInt(rs.getString(2)), Integer.parseInt(rs.getString(3)),rs.getString(4));
 						dtm.addRow(new Object[] {cli.getClientIP().toString(),String.valueOf(cli.getClientPort()),String.valueOf(cli.getTimeRemain()),cli.getMacAddress()});
@@ -408,6 +412,22 @@ public class Server extends JFrame implements Runnable {
 			// TODO: handle exception
 		}
 	}
+	public String getID() {
+		String s = "(";
+		String a = "";
+		try {
+			rs = db.executeQuery("select iD from iptable where username = " + "\"" + userName + "\"");
+			while(rs.next()) {
+				a += "," + "\"" +rs.getString(1) + "\"";
+			}
+			a = a.substring(1);
+			s += a + ")";
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return s;
+	}
+	
 	public String receiveDataServer(DatagramSocket server) throws Exception {
 		byte[] temp = new byte[1024];
 		DatagramPacket receive_Packet = new DatagramPacket(temp,temp.length);

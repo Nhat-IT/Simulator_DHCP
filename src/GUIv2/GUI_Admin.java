@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -50,7 +51,7 @@ public class GUI_Admin {
 		userText = new JTextField();
 		userText.setBounds(180, 70, 200, 25);
 		userText.setFont(new Font("Monospaced", Font.BOLD, 13));
-		userText.setText("admin1");
+		userText.setText("admin2");
 		panel.add(userText);
 		
 		passwordLabel = new JLabel("Mật Khẩu");
@@ -61,7 +62,7 @@ public class GUI_Admin {
 		passwordText = new JPasswordField();
 		passwordLabel.setFont(new Font("Monospaced", Font.BOLD, 13));
 		passwordText.setBounds(180, 120, 200, 25);
-		passwordText.setText("admin1");
+		passwordText.setText("admin2");
 		panel.add(passwordText);
 		
 		btnBack = new JButton("<= Quay Lại");
@@ -85,8 +86,19 @@ public class GUI_Admin {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(checkLogin(userText.getText(), String.valueOf(passwordText.getPassword()))) {
-					frame.setVisible(false);
-					GUI_Admin_Select guiAdminSelect = new GUI_Admin_Select(userText.getText());
+					if(!checkDataInAccount(userText.getText(), String.valueOf(passwordText.getPassword()))) {
+						JOptionPane.showMessageDialog(panel, "Tài khoản không chứa dải mạng nào, nhấn \"OK\" để thêm mới", "Thông Báo", JOptionPane.WARNING_MESSAGE);
+						frame.setVisible(false);
+						String[] args = {userText.getText()};
+						createNew.main(args);
+					}
+					else {
+						frame.setVisible(false);
+						GUI_Admin_Select guiAdminSelect = new GUI_Admin_Select(userText.getText());
+					}
+				}
+				else {
+					JOptionPane.showMessageDialog(panel, "Tên tài khoản hoặc mật khẩu không đúng. Vui lòng nhập lại !", "Thông Báo", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
@@ -111,7 +123,7 @@ public class GUI_Admin {
 		ResultSet rs;
 		getDB db = new getDB();
 		try {
-			rs = db.executeQuery("select * from account where username = \""+ username + "\" and password = \"" + password + "\";");
+			rs = db.executeQuery("select * from account where username = \""+ username + "\" and password = \"" + password + "\" and fullControl = 0;");
 			while(rs.next()) {
 				dem++;
 			}
@@ -125,5 +137,21 @@ public class GUI_Admin {
 		else {
 			return false;
 		}
+	}
+	
+	public Boolean checkDataInAccount(String username, String pass) {
+		int dem = 0;
+		ResultSet rs;
+		getDB db = new getDB();
+		try {
+			rs = db.executeQuery("select * from iptable where username = \""+ username + "\" ");
+			while(rs.next()) {
+				dem++;
+			}
+			if(dem != 0) return true;
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		return false;
 	}
 }

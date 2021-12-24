@@ -43,7 +43,7 @@ public class GUI_Khach_ChucNang1 implements Runnable {
 
 	public GUI_Khach_ChucNang1() throws Exception {
 		try {
-			this.host = InetAddress.getByName("10.0.0.205");
+			this.host = InetAddress.getByName("255.255.255.255");
 			this.port = 5000;
 			this.client = new DatagramSocket();
 		} catch (Exception e) {
